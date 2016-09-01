@@ -25,9 +25,9 @@ class Diceware:
         for i in range(l):
             e, key = 1, 0
             seed(urandom(16))
-            for j in range(5): # builds the key digit by digit
+            for j in range(5):  # builds the key digit by digit
                 r = randint(1, 6) # simulate a dice roll
-                r *= e # *= (1, 10, 100, 1000, etc)
+                r *= e  # *= (1, 10, 100, 1000, etc)
                 key += r
                 e *= 10 # 1 -> 10 -> 100, etc
             self.passphrase.append(self.__dict[str(key)])

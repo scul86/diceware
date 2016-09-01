@@ -10,7 +10,7 @@ class Diceware:
 
     def __init__(self):
         self.passphrase = []
-        with open('dicewarewordlist.txt', 'r') as f:
+        with open('diceware_word_list.txt', 'r') as f:
             for line in f:
                 s = line.split()
                 self.__dict[s[0]] = s[1]

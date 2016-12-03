@@ -48,7 +48,7 @@ def main():
     while True:
         d = Diceware()
         d.build_passphrase()
-        print(d)
+        print('\n{}\n'.format(d))
         again = input("Make another DiceWare passphrase? [y/N] : ")
         if again.lower() != 'y':
             system('clear')

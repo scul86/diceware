@@ -10,12 +10,7 @@ class Diceware:
     __dict = {}
 
     def __init__(self):
-        while True:
-            try:
-                self.len = int(input("How many words: "))
-                break
-            except ValueError:
-                print("Oops!  That was not an integer.  Try again...")
+        self.len = 0
         self.passphrase = []
         with open('diceware_word_list.txt', 'r') as f:
             for line in f:
@@ -30,23 +25,36 @@ class Diceware:
 
     def clean(self):
         self.passphrase = []
-        seed(urandom(8))
+        seed(urandom(16))
+
+    def set_length(self):
+        while True:
+            try:
+                self.len = int(input("How many words: "))
+                break
+            except ValueError:
+                print("Oops!  That was not an integer.  Try again...")
+
+    def build_word(self):
+        exp, key = 1, 0
+        seed(urandom(16))
+        for j in range(5):  # builds the key digit by digit
+            r = randint(1, 6)  # simulate a dice roll
+            r *= exp  # *= (1, 10, 100, 1000, etc)
+            key += r
+            exp *= 10  # 1 -> 10 -> 100, etc
+        return self.__dict[str(key)]
 
     def build_passphrase(self):
+        self.set_length()
         for i in range(self.len):
-            exp, key = 1, 0
-            seed(urandom(16))
-            for j in range(5):  # builds the key digit by digit
-                r = randint(1, 6) # simulate a dice roll
-                r *= exp  # *= (1, 10, 100, 1000, etc)
-                key += r
-                exp *= 10 # 1 -> 10 -> 100, etc
-            self.passphrase.append(self.__dict[str(key)])
+            self.passphrase.append(self.build_word())
 
 
 def main():
+    d = Diceware()
     while True:
-        d = Diceware()
+        d.clean()
         d.build_passphrase()
         print('\n{}\n'.format(d))
         again = input("Make another DiceWare passphrase? [y/N] : ")

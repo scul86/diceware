@@ -29,7 +29,7 @@ class Diceware:
         return ' '.join(self.passphrase)
 
     def clean(self):
-        self.passphrase = None
+        self.passphrase = []
         seed(urandom(8))
 
     def build_passphrase(self):

@@ -6,7 +6,7 @@ from os import urandom, system
 from time import sleep
 
 
-class Diceware:
+class Diceware(object):
     __dict = {}
 
     def __init__(self):

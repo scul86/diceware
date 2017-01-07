@@ -1,9 +1,11 @@
 #!/usr/bin/python3
 
 
-from random import randint, seed
+from random import SystemRandom
 from os import urandom, system
 from time import sleep
+
+_sysrand = SystemRandom()
 
 
 class Diceware(object):
@@ -25,7 +27,6 @@ class Diceware(object):
 
     def clean(self):
         self.passphrase = []
-        seed(urandom(16))
 
     def set_length(self):
         while True:
@@ -37,9 +38,8 @@ class Diceware(object):
 
     def build_word(self):
         exp, key = 1, 0
-        seed(urandom(16))
         for j in range(5):  # builds the key digit by digit
-            r = randint(1, 6)  # simulate a dice roll
+            r = _sysrand._randbelow(6) + 1  # simulate a dice roll
             r *= exp  # *= (1, 10, 100, 1000, etc)
             key += r
             exp *= 10  # 1 -> 10 -> 100, etc

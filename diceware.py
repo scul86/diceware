@@ -2,7 +2,7 @@
 
 
 from random import SystemRandom
-from os import urandom, system
+from os import walk, system
 from time import sleep
 
 _sysrand = SystemRandom()
@@ -11,10 +11,33 @@ _sysrand = SystemRandom()
 class Diceware(object):
     __dict = {}
 
-    def __init__(self):
+    def __init__(self, numdice=None):
         self.len = 0
         self.passphrase = []
-        with open('diceware_word_list.txt', 'r') as f:
+        self.wordlist = self.set_wordlist()
+        self.read_wordlist()
+        self.num_dice = len(list(self.__dict.keys())[0])
+
+    def set_wordlist(self):
+        wordlists = []
+        for (_,_,files) in walk('.'):
+            for f in [file for file in files if 'wordlist' in file]:
+                wordlists.append(f)
+            break
+
+        print('Which word list to use?')
+        for i, l in enumerate(wordlists):
+            print('{}: {}'.format(i+1, l))
+        while True:
+            try:
+                resp = int(input())
+                break
+            except ValueError:
+                print('Please enter an integer')
+        return wordlists[resp-1]
+
+    def read_wordlist(self):
+        with open(self.wordlist, 'r') as f:
             for line in f:
                 s = line.split()
                 self.__dict[s[0]] = s[1]
@@ -38,7 +61,7 @@ class Diceware(object):
 
     def build_word(self):
         exp, key = 1, 0
-        for j in range(5):  # builds the key digit by digit
+        for j in range(self.num_dice):  # builds the key digit by digit
             r = _sysrand._randbelow(6) + 1  # simulate a dice roll
             r *= exp  # *= (1, 10, 100, 1000, etc)
             key += r

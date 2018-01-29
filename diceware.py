@@ -26,7 +26,7 @@ class Diceware(object):
             break
 
         print('Which word list to use?')
-        for i, l in enumerate(wordlists):
+        for i, l in enumerate(sorted(wordlists)):
             print('{}: {}'.format(i+1, l))
         while True:
             try:

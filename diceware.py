@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 
 
-from random import SystemRandom
+from random import SystemRandom, choice
+import random
 from os import walk, system
 from time import sleep
 
@@ -80,12 +81,29 @@ class Diceware(object):
         for i in range(self.len):
             self.passphrase.append(self.build_word())
 
+    def rand_char(self):
+        c = input('Insert random character? [y/N]: ')
+        if c.lower() == 'y':
+            char_set = [['~ ! # $ % ^'],
+                        ['& * ( ) - ='],
+                        ['+ [ ] \ { }'],
+                        [': ; " \' < >'],
+                        ['? / 0 1 2 3'],
+                        ['4 5 6 7 8 9']]
+            char = choice(choice(char_set)[0].split(' '))
+            word_index = random.randrange(len(self.passphrase))
+            index = random.randrange(0, len(self.passphrase[word_index]))
+            word = list(self.passphrase[word_index])
+            word[index] = char
+            self.passphrase[word_index] = ''.join(word)
+
 
 def main():
     d = Diceware()
     while True:
         d.clean()
         d.build_passphrase()
+        d.rand_char()
         print('\n{}\n'.format(d))
         again = input("Make another DiceWare passphrase? [y/N] : ")
         if again.lower() != 'y':

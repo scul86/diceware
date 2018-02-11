@@ -11,22 +11,28 @@ _sysrand = SystemRandom()
 class Diceware(object):
     __dict = {}
 
-    def __init__(self, numdice=None):
+    def __init__(self):
         self.len = 0
         self.passphrase = []
-        self.wordlist = self.set_wordlist()
+        self.wordlist = None
+        self.num_dice = 0
+
+        self.set_wordlist()
         self.read_wordlist()
+        self.set_num_dice()
+
+    def set_num_dice(self):
         self.num_dice = len(list(self.__dict.keys())[0])
 
     def set_wordlist(self):
-        wordlists = []
-        for (_,_,files) in walk('.'):
+        word_lists = []
+        for (_, _, files) in walk('.'):
             for f in [file for file in files if 'wordlist' in file]:
-                wordlists.append(f)
+                word_lists.append(f)
             break
-
+        sorted_word_lists = sorted(word_lists)
         print('Which word list to use?')
-        for i, l in enumerate(sorted(wordlists)):
+        for i, l in enumerate(sorted_word_lists):
             print('{}: {}'.format(i+1, l))
         while True:
             try:
@@ -34,9 +40,10 @@ class Diceware(object):
                 break
             except ValueError:
                 print('Please enter an integer')
-        return wordlists[resp-1]
+        self.wordlist = sorted_word_lists[resp-1]
 
     def read_wordlist(self):
+        print('Using wordlist: {}'.format(self.wordlist))
         with open(self.wordlist, 'r') as f:
             for line in f:
                 s = line.split()
@@ -88,6 +95,9 @@ def main():
             system('clear')
             d.clean()
             break
+        d.set_wordlist()
+        d.read_wordlist()
+        d.set_num_dice()
 
 
 if __name__ == '__main__':
